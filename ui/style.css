@@ -3,7 +3,8 @@
     src: url('assets/fonts/chaletlondon1960.woff2') format('woff2')
 }
 
-h2, h3 {
+h2,
+h3 {
     margin: 0;
     padding-top: 0.5vh;
     padding-bottom: 0.5vh;
@@ -61,7 +62,7 @@ h2, h3 {
     border: 0.3vh solid #2d6eb9;
 }
 
-.cameraview > img {
+.cameraview>img {
     max-height: 80%;
     max-width: 80%;
     object-fit: contain;
@@ -72,7 +73,7 @@ h2, h3 {
     background-color: #646464;
 }
 
-.cameraview.active > img {
+.cameraview.active>img {
     filter: invert();
 }
 
@@ -115,7 +116,7 @@ h2, h3 {
     border-right: 0.02vw solid rgba(255, 255, 255, 0.2);
 }
 
-#tabs button > img {
+#tabs button>img {
     position: absolute;
     width: 4vw;
     height: 4vh;
@@ -134,16 +135,16 @@ h2, h3 {
     border-left: 0.02vw solid rgba(255, 255, 255, 0.2);
 }
 
-#tabs button[style*="display: none"] + button:not([style*="display: none"]) {
+#tabs button[style*="display: none"]+button:not([style*="display: none"]) {
     border-left: 0.02vw solid rgba(255, 255, 255, 0.2);
 }
 
-#tabs button:not([style*="display: none"]) + button {
+#tabs button:not([style*="display: none"])+button {
     border-left: none;
 }
 
-#tabs > button:not([style*="display: none"]) ~ * {
-    border-left: none!important;
+#tabs>button:not([style*="display: none"])~* {
+    border-left: none !important;
 }
 
 #tabs .tablinks.active {
@@ -156,7 +157,7 @@ h2, h3 {
     background-color: #646464;
 }
 
-#tabs .tablinks.active > img {
+#tabs .tablinks.active>img {
     filter: invert();
 }
 
@@ -234,7 +235,7 @@ h2, h3 {
     color: white;
 }
 
-.popup > .content> .title {
+.popup>.content>.title {
     background: rgba(0, 0, 0, 0.5);
     margin-bottom: 0.5vh;
     height: 2.5vh;
@@ -244,7 +245,7 @@ h2, h3 {
     border-top-right-radius: 20px;
 }
 
-.popup > .content> .message {
+.popup>.content>.message {
     background: rgba(0, 0, 0, 0.5);
     height: 8vh;
     padding-top: 4vh;
@@ -270,7 +271,7 @@ input[type="radio"] {
     align-items: center;
 }
 
-.group > h2 {
+.group>h2 {
     color: #f0f0f0;
     text-align: left;
     font-size: 1.7vh;
@@ -293,7 +294,8 @@ input[type="radio"] {
     text-align: center;
 }
 
-.radioitem label, .radioitem input {
+.radioitem label,
+.radioitem input {
     position: absolute;
     top: 0;
     left: 0;
@@ -311,12 +313,12 @@ input[type="radio"] {
     border-radius: 20px;
 }
 
-.radioitem input[type="radio"]:checked + label {
+.radioitem input[type="radio"]:checked+label {
     color: white;
     border: 2px solid white;
 }
 
-.radioitem input[type="radio"]:not(:checked) + label:hover {
+.radioitem input[type="radio"]:not(:checked)+label:hover {
     border: 2px solid white;
 }
 
@@ -329,7 +331,7 @@ input[type="radio"] {
     pointer-events: none;
 }
 
-.radioitem input[type="radio"]:checked + label img {
+.radioitem input[type="radio"]:checked+label img {
     filter: none;
 }
 
@@ -353,6 +355,7 @@ input[type="radio"] {
 #parentswindow #parentsdad {
     left: 43%;
 }
+
 #parentswindow #parentsmom {
     left: 7%;
 }
@@ -396,7 +399,9 @@ h3 {
     background-size: 120% auto;
 }
 
-.list, .slider, .datainput {
+.list,
+.slider,
+.datainput {
     position: relative;
     width: 20vw;
     height: 7vh;
@@ -420,7 +425,9 @@ h3 {
     transform: scaleX(-1);
 }
 
-.list .controls select, .datainput .controls input {
+.list .controls select,
+.datainput .controls input {
+    appearance: none;
     -webkit-appearance: none;
     outline: none;
     width: 85%;
@@ -460,6 +467,7 @@ h3 {
 }
 
 .slider input[type=range] {
+    appearance: none;
     -webkit-appearance: none;
     background: 0 0;
     width: 85%;
@@ -487,27 +495,27 @@ h3 {
     direction: rtl;
 }
 
-.slider > .valuelabel {
+.slider>.valuelabel {
     font-size: 1.5vh;
     position: absolute;
     top: 35%;
     color: rgba(255, 255, 255, 0.5);
 }
 
-.slider > .valuelabel.left {
+.slider>.valuelabel.left {
     left: 4%;
 }
 
-.slider > .valuelabel.center {
+.slider>.valuelabel.center {
     left: 50%;
     transform: translate(-50%, 0);
 }
 
-.slider > .valuelabel.right {
+.slider>.valuelabel.right {
     right: 4%;
 }
 
-.slider.contribution > .controls > .icon {
+.slider.contribution>.controls>.icon {
     position: relative;
     width: 8%;
     height: 70%;
@@ -516,12 +524,12 @@ h3 {
     background-repeat: no-repeat;
 }
 
-.slider.contribution > .controls > .icon.left {
+.slider.contribution>.controls>.icon.left {
     left: 3%;
     background-image: url('https://nui-img/mpleaderboard/leaderboard_female_icon');
 }
 
-.slider.contribution > .controls > .icon.right {
+.slider.contribution>.controls>.icon.right {
     right: 3%;
     background-image: url('https://nui-img/mpleaderboard/leaderboard_male_icon');
 }
@@ -546,7 +554,7 @@ h3 {
     flex-wrap: wrap;
 }
 
-.colorselect .palette input[type="radio"] + label {
+.colorselect .palette input[type="radio"]+label {
     display: inline-block;
     width: 3.5vh;
     height: 3.5vh;
@@ -560,11 +568,11 @@ h3 {
     border-radius: 50%;
 }
 
-.colorselect .palette input[type="radio"]:checked + label {
+.colorselect .palette input[type="radio"]:checked+label {
     border: 0.15vh solid white;
     background-image: url('assets/icons/check.svg');
 }
 
-.colorselect .palette input[type="radio"]:not(:checked) + label:hover {
+.colorselect .palette input[type="radio"]:not(:checked)+label:hover {
     border: 0.15vh solid white;
 }

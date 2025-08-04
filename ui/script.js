@@ -10,8 +10,8 @@ var facepaintColors = {}
 var blusherColors = {}
 var naturalEyeColors = null
 
-$(document).ready(function() {
-    window.addEventListener('message', function(event) {
+$(document).ready(function () {
+    window.addEventListener('message', function (event) {
         if (event.data.action == 'setVisible') {
             if (event.data.show) {
                 $('body').fadeIn(100);
@@ -86,7 +86,7 @@ $(document).ready(function() {
                 }
                 else {
                     blusher.addClass('group')
-                    $.get('pages/optional/blusher.html', function(data) {
+                    $.get('pages/optional/blusher.html', function (data) {
                         blusher.html(data);
                         loadColorPalettes(blusher);
                         refreshContentData(blusher, event.data.character);
@@ -132,19 +132,19 @@ var lastOffsetY = 0
 var lastScreenX = 0.5 * screen.width
 var lastScreenY = 0.5 * screen.height
 
-$('#cameracontrol').on('mousedown', function(event) {
+$('#cameracontrol').on('mousedown', function (event) {
     if (event.button == 0) {
         moving = true;
     }
 });
 
-$('#cameracontrol').on('mouseup', function(event) {
+$('#cameracontrol').on('mouseup', function (event) {
     if (moving && event.button == 0) {
         moving = false;
     }
 });
 
-$('#cameracontrol').on('mousemove', function(event) {
+$('#cameracontrol').on('mousemove', function (event) {
     if (moving == true) {
         let offsetX = event.screenX - lastScreenX;
         let offsetY = event.screenY - lastScreenY;
@@ -165,7 +165,7 @@ $('#cameracontrol').on('mousemove', function(event) {
     }
 });
 
-$('#cameracontrol').on('wheel', function(event) {
+$('#cameracontrol').on('wheel', function (event) {
     let zoom = event.originalEvent.deltaY / 2000;
     $.post('https://cui_character/updateCameraZoom', JSON.stringify({
         zoom: zoom,
@@ -174,8 +174,8 @@ $('#cameracontrol').on('wheel', function(event) {
 
 /*  content loading     */
 function loadTabContent(tabName, charData, clothesData, identityData) {
-    $.get('pages/' + tabName + '.html', function(data) {
-        let tab =  $('div#' + tabName + '.tabcontent');
+    $.get('pages/' + tabName + '.html', function (data) {
+        let tab = $('div#' + tabName + '.tabcontent');
         tab.html(data);
         if (tabName == 'style') {
             loadOptionalStyle(tab, charData);
@@ -270,13 +270,13 @@ function loadOptionalStyle(element, charData) {
         let suffix = 'male.html'
         hairpage = hairpage + suffix;
         facialhair.addClass('group')
-        $.get('pages/optional/facialhair.html', function(data) {
+        $.get('pages/optional/facialhair.html', function (data) {
             facialhair.html(data);
             loadColorPalettes(facialhair);
             refreshContentData(facialhair, charData);
         });
         chesthair.addClass('group')
-        $.get('pages/optional/chesthair.html', function(data) {
+        $.get('pages/optional/chesthair.html', function (data) {
             chesthair.html(data);
             loadColorPalettes(chesthair);
             refreshContentData(chesthair, charData);
@@ -288,7 +288,7 @@ function loadOptionalStyle(element, charData) {
         hairpage = hairpage + suffix;
         if (charData.makeup_type != 2) {
             blusher.addClass('group')
-            $.get('pages/optional/blusher.html', function(data) {
+            $.get('pages/optional/blusher.html', function (data) {
                 blusher.html(data);
                 loadColorPalettes(blusher);
                 refreshContentData(blusher, charData);
@@ -296,7 +296,7 @@ function loadOptionalStyle(element, charData) {
         }
     }
 
-    $.get(hairpage, function(data) {
+    $.get(hairpage, function (data) {
         hair.html(data);
         loadColorPalettes(hair);
         refreshContentData(hair, charData);
@@ -305,11 +305,11 @@ function loadOptionalStyle(element, charData) {
 
 function loadOptionalIdentity(element, identityData) {
     let pdata = element.find('#pdata');
-    $.get('pages/optional/esxidentity.html', function(data) {
+    $.get('pages/optional/esxidentity.html', function (data) {
         pdata.html(data);
 
         // set the limits (config)
-        pdata.find('.name').each(function() {
+        pdata.find('.name').each(function () {
             $(this).prop('placeholder', 'max. ' + identityLimits.namemax + ' characters');
         });
         let sliderheight = pdata.find('input[type="range"]').first();
@@ -321,7 +321,7 @@ function loadOptionalIdentity(element, identityData) {
 }
 
 function loadColorPalettes(element) {
-    $(element).find('.palette').each(function() {
+    $(element).find('.palette').each(function () {
         let colorData = null
         if ($(this).hasClass('hair')) {
             colorData = hairColors;
@@ -518,8 +518,7 @@ function closeWindow(save) {
             let formattedSex = ($("input[type='radio'][name='sex']:checked").val()) == 0 ? 'm' : 'f';
 
             let callbackstring = 'https://cui_character/identityupdate';
-            if(!cancelable)
-            {
+            if (!cancelable) {
                 callbackstring = 'https://cui_character/identityregister';
             }
             $.post(callbackstring, JSON.stringify({
@@ -548,7 +547,7 @@ function openTab(evt, tab) {
 
     if (!wasActive) {
         $.post('https://cui_character/playSound', JSON.stringify({
-            sound:'tabchange'
+            sound: 'tabchange'
         }));
         $.post('https://cui_character/setCurrentTab', JSON.stringify({
             tab: tab,
@@ -558,12 +557,12 @@ function openTab(evt, tab) {
     $(evt.target).addClass('active')
 }
 
-$('.panelbottom button').on('click', function(evt) {
+$('.panelbottom button').on('click', function (evt) {
     evt.preventDefault();
-    $.post('https://cui_character/playSound', JSON.stringify({sound:'panelbuttonclick'}));
+    $.post('https://cui_character/playSound', JSON.stringify({ sound: 'panelbuttonclick' }));
 });
 
-$('#main .menuclose').on('click', function(evt) {
+$('#main .menuclose').on('click', function (evt) {
     evt.preventDefault();
     if (evt.target.id == 'accept') {
         accept = true;
@@ -574,19 +573,19 @@ $('#main .menuclose').on('click', function(evt) {
 
     let action = accept ? 'save' : 'discard';
     let message = 'Are you sure you want to ' + action + ' your changes and exit?';
-    let popupData = { 
-        title: 'confirmation', 
+    let popupData = {
+        title: 'confirmation',
         message: message
     };
     openPopup(popupData, closeWindow, accept);
 });
 
-$('.popup #no').on('click', function(evt) {
+$('.popup #no').on('click', function (evt) {
     evt.preventDefault();
     closePopup();
 });
 
-$('.popup #yes').on('click', function(evt) {
+$('.popup #yes').on('click', function (evt) {
     evt.preventDefault();
 
     if (popupCallback) {
@@ -629,20 +628,19 @@ function handleListButton(button) {
 }
 
 var listButtonTimeout = 0;
-$(document).on('mousedown', '.list .controls button', function(evt) {
+$(document).on('mousedown', '.list .controls button', function (evt) {
     listButtonTimeout = setInterval(handleListButton, 300, $(this));
 });
 
-$(document).on('mouseup mouseleave', '.list .controls button', function(evt) {
+$(document).on('mouseup mouseleave', '.list .controls button', function (evt) {
     clearInterval(listButtonTimeout);
 });
 
-$(document).on('click', '.list .controls button', function(evt) {
+$(document).on('click', '.list .controls button', function (evt) {
     handleListButton($(this));
 });
 
-function handleSliderButton(button)
-{
+function handleSliderButton(button) {
     let slider = button.siblings('input[type=range]').first();
     let min = parseInt(slider.prop('min'));
     let max = parseInt(slider.prop('max'));
@@ -667,15 +665,15 @@ function handleSliderButton(button)
 }
 
 var sliderButtonTimeout = 0;
-$(document).on('mousedown', '.slider .controls button', function(evt) {
+$(document).on('mousedown', '.slider .controls button', function (evt) {
     sliderButtonTimeout = setInterval(handleSliderButton, 300, $(this));
 });
 
-$(document).on('mouseup mouseleave', '.slider .controls button', function(evt) {
+$(document).on('mouseup mouseleave', '.slider .controls button', function (evt) {
     clearInterval(sliderButtonTimeout);
 });
 
-$(document).on('click', '.slider .controls button', function(evt) {
+$(document).on('click', '.slider .controls button', function (evt) {
     handleSliderButton($(this));
 });
 
@@ -788,7 +786,7 @@ function updatePortrait(elemId) {
 // working around unintuitive/bad behavior:
 // https://forum.jquery.com/topic/alert-message-when-clicked-selected-radio-button
 var radioChecked = false
-$(document).on('mouseenter', 'input:radio[name=sex] + label', function(evt) {
+$(document).on('mouseenter', 'input:radio[name=sex] + label', function (evt) {
     if ($(this).prev().is(':checked')) {
         radioChecked = true;
     }
@@ -797,77 +795,76 @@ $(document).on('mouseenter', 'input:radio[name=sex] + label', function(evt) {
     }
 });
 
-$(document).on('click', 'input:radio[name=sex]', function(evt) {
-    if(radioChecked == false)
-    {
+$(document).on('click', 'input:radio[name=sex]', function (evt) {
+    if (radioChecked == false) {
         let popupData = {
-            title: 'confirmation', 
+            title: 'confirmation',
             message: 'Changing your character\'s gender will reset all current customizations. Are you sure you want to do this?'
         };
-        openPopup(popupData, function(target) {
+        openPopup(popupData, function (target) {
             target.prop('checked', true);
             updateGender(target.val());
             $.post('https://cui_character/playSound', JSON.stringify({
-                sound:'optionchange'
+                sound: 'optionchange'
             }));
         }, $(this));
     }
     return false;
 });
 
-$(document).on('click', '.palette input:radio + label', function(evt) {
+$(document).on('click', '.palette input:radio + label', function (evt) {
     let radio = $(this).prev();
     if (radio.is(':not(:checked)')) {
         radio.prop('checked', true);
         radio.trigger('change');
         $.post('https://cui_character/playSound', JSON.stringify({
-            sound:'optionchange'
+            sound: 'optionchange'
         }));
     }
 });
 
-$(document).on('change', 'select.headblend', function(evt) {
+$(document).on('change', 'select.headblend', function (evt) {
     updatePortrait($(this).attr('id'));
     updateHeadBlend($(this).attr('id'), $(this).val());
 });
 
-$(document).on('change', 'select.eyecolor', function(evt) {
+$(document).on('change', 'select.eyecolor', function (evt) {
     updateEyeColor($(this).val());
 });
 
-$(document).on('change', 'select.component.hairstyle', function(evt) {
+$(document).on('change', 'select.component.hairstyle', function (evt) {
     // NOTE: hairstyle is a special case as you don't get to select texture for it
     updateComponent($(this).attr('id'), $(this).val(), 'hair_2', 0, $(this).data('index'));
 });
 
-$(document).on('refresh', 'input[type=range].headblend', function(evt) {
+$(document).on('refresh', 'input[type=range].headblend', function (evt) {
     let valueLeft = $(this).parent().siblings('.valuelabel.left');
     let valueRight = $(this).parent().siblings('.valuelabel.right');
     valueLeft.text((100 - $(this).val()).toString() + '%');
     valueRight.text($(this).val().toString() + '%');
 });
 
-$(document).on('input', 'input[type=range].headblend', function(evt) {
+$(document).on('input', 'input[type=range].headblend', function (evt) {
     $(this).trigger('refresh')
     updateHeadBlend($(this).attr('id'), $(this).val());
 });
 
-$(document).on('input', 'input[type=range].facefeature', function(evt) {
+$(document).on('input', 'input[type=range].facefeature', function (evt) {
     updateFaceFeature($(this).attr('id'), $(this).val(), $(this).data('index'));
 });
 
-$(document).on('change', 'select.headoverlay', function(evt) {
+$(document).on('change', 'select.headoverlay', function (evt) {
     // find the opacity range slider id for this feature
     let pairedId = $(this).parents().eq(2).find('.headoverlay').eq(1).attr('id');
     updateHeadOverlay($(this).attr('id'), pairedId, $(this).val(), $(this).data('index'), false);
 });
 
-$(document).on('refresh', 'input[type=range].headoverlay, input[type=range].headoverlayextra, input[type=range].facepaintoverlay', function(evt) {
+$(document).on('refresh', 'input[type=range].headoverlay, input[type=range].headoverlayextra, input[type=range].facepaintoverlay', function (evt) {
     let valueCenter = $(this).parent().siblings('.valuelabel.center');
     valueCenter.text($(this).val().toString() + '%');
 });
 
-$(document).on('input', 'input[type=range].headoverlay', function(evt) {
+$(document).on('input', 'input[type=range].headoverlay', function (evt) {
     $(this).trigger('refresh')
 
     // find the style select list id for which this is the opacity value
@@ -880,7 +877,7 @@ $(document).on('input', 'input[type=range].headoverlay', function(evt) {
     and 'moles & freckles' properties. In addition to changing the face, these also
     change the body.
 */
-$(document).on('change', 'select.headoverlayextra', function(evt) {
+$(document).on('change', 'select.headoverlayextra', function (evt) {
     let pairedId = $(this).parents().eq(2).find('.headoverlayextra').eq(1).attr('id');
     updateHeadOverlayExtra(
         $(this).attr('id'),
@@ -894,7 +891,7 @@ $(document).on('change', 'select.headoverlayextra', function(evt) {
     );
 });
 
-$(document).on('input', 'input[type=range].headoverlayextra', function(evt) {
+$(document).on('input', 'input[type=range].headoverlayextra', function (evt) {
     $(this).trigger('refresh')
     let pairedkey = $(this).parents().eq(2).find('.headoverlayextra').eq(0)
     let pairedid = pairedkey.attr('id');
@@ -919,30 +916,30 @@ $(document).on('input', 'input[type=range].headoverlayextra', function(evt) {
 */
 
 function setupFacepaintColors(facepaintgroup, colorable, resetcolor) {
-        // Here we create or destroy color palette depending on the chosen facepaint type
-        if (colorable) {
-            let newelement = `
+    // Here we create or destroy color palette depending on the chosen facepaint type
+    if (colorable) {
+        let newelement = `
             <div class="colorselect">
                 <h3 class="header">Color</h3>
                 <div class="palette facepaint overlaycolor" id="blush_3" data-index="5" data-colortype="2">
                 </div>
             </div>
             `
-            facepaintgroup.append(newelement);
-            loadColorPalettes(facepaintgroup);
+        facepaintgroup.append(newelement);
+        loadColorPalettes(facepaintgroup);
 
-            if (resetcolor) {
-                let firstcolor = facepaintgroup.find('.colorselect .palette input:radio').first();
-                firstcolor.prop('checked', true);
-                firstcolor.trigger('change');
-            }
+        if (resetcolor) {
+            let firstcolor = facepaintgroup.find('.colorselect .palette input:radio').first();
+            firstcolor.prop('checked', true);
+            firstcolor.trigger('change');
         }
-        else {
-            colors = facepaintgroup.find('.colorselect').remove();
-        }
+    }
+    else {
+        colors = facepaintgroup.find('.colorselect').remove();
+    }
 }
 
-$(document).on('change', 'select.facepaintoverlay', function(evt) {
+$(document).on('change', 'select.facepaintoverlay', function (evt) {
     let selected = $(this).find('option:selected');
     let id = selected.attr('class');
     let pairedId = null;
@@ -975,7 +972,7 @@ $(document).on('change', 'select.facepaintoverlay', function(evt) {
     $(this).data('prev', type)
 });
 
-$(document).on('input', 'input[type=range].facepaintoverlay', function(evt) {
+$(document).on('input', 'input[type=range].facepaintoverlay', function (evt) {
     $(this).trigger('refresh');
     let selected = $(this).parents().eq(2).find('select').eq(0).find('option:selected');
     let pairedId = selected.attr('class');
@@ -1005,29 +1002,29 @@ $(document).on('input', 'input[type=range].facepaintoverlay', function(evt) {
 });
 ////////////////////////////////////////////////////////
 
-$(document).on('change', '.palette.haircolor input:radio', function(evt) {
+$(document).on('change', '.palette.haircolor input:radio', function (evt) {
     // NOTE: 'name' attribute value is taken from palette's id
     let highlight = $(this).attr('name') != 'hair_color_1' ? true : false;
     updateHairColor($(this).attr('name'), $(this).val(), highlight)
 });
 
-$(document).on('change', '.palette.overlaycolor input:radio', function(evt) {
+$(document).on('change', '.palette.overlaycolor input:radio', function (evt) {
     // NOTE: 'name' attribute value is taken from palette's id
     let palette = $(this).parents().eq(1)
     updateOverlayColor($(this).attr('name'), $(this).val(), palette.data('index'), palette.data('colortype'))
 });
 
-$(document).on('change', 'select.makeuptype', function(evt) {
+$(document).on('change', 'select.makeuptype', function (evt) {
     let value = $(this).find('option:selected').val();
     $.post('https://cui_character/clearMakeup', JSON.stringify({
         clearopacity: true,
         clearblusher: true,
     }));
-    $.post('https://cui_character/updateMakeupType', JSON.stringify({type:value}));
+    $.post('https://cui_character/updateMakeupType', JSON.stringify({ type: value }));
 });
 
 // clothing components
-$(document).on('change', 'select.clotheslist.component', function(evt) {
+$(document).on('change', 'select.clotheslist.component', function (evt) {
     let selected = $(this).find('option:selected');
     let drwkey = $(this).data('drwkey');
     let drwval = selected.data('drawable');
@@ -1038,7 +1035,7 @@ $(document).on('change', 'select.clotheslist.component', function(evt) {
 });
 
 // clothing props
-$(document).on('change', 'select.clotheslist.prop', function(evt) {
+$(document).on('change', 'select.clotheslist.prop', function (evt) {
     let selected = $(this).find('option:selected');
     let drwkey = $(this).data('drwkey');
     let drwval = selected.data('drawable');
@@ -1072,14 +1069,14 @@ function refreshMakeupUI(charData, setDefaultMakeup) {
     // Remove all content
     makeupcontrol.nextAll('div').remove();
 
-    $.get(makeuppage, function(data) {
+    $.get(makeuppage, function (data) {
         let makeupcontent = makeupcontrol.after(data).next()
         loadColorPalettes(makeupcontent);
         refreshContentData(makeupcontent, charData);
 
         if (setDefaultMakeup) {
             let makeupoption = null;
-            if ((charData.makeup_type != 2) || 
+            if ((charData.makeup_type != 2) ||
                 ((charData.makeup_1 == 255) && (charData.blush_1 == 255))) {
                 makeupoption = makeupcontent.find('select option').first()
             }
@@ -1095,7 +1092,7 @@ function refreshMakeupUI(charData, setDefaultMakeup) {
 }
 
 // esx_identity integration
-$(document).on('refresh', 'input[type=range]#height', function(evt) {
+$(document).on('refresh', 'input[type=range]#height', function (evt) {
     let inches = $(this).val();
     let feet = Math.floor(inches / 12);
     let inchesLeft = inches % 12;
@@ -1109,14 +1106,14 @@ $(document).on('refresh', 'input[type=range]#height', function(evt) {
     // TODO: Display metric if that is selected in game's measurement system options.
 });
 
-$(document).on('input', 'input[type=range]#height', function(evt) {
+$(document).on('input', 'input[type=range]#height', function (evt) {
     $(this).trigger('refresh');
 });
 
 /*  interface and current character synchronization     */
 function refreshComponentList(parent, id, component, drawable, texture) {
     let list = parent.find(id);
-    list.find('option').each(function() {
+    list.find('option').each(function () {
         $(this).prop('selected', false);
     });
     list.find('option[data-component="' + component + '"][data-drawable="' + drawable + '"][data-texture="' + texture + '"]').first().prop('selected', true);
@@ -1124,7 +1121,7 @@ function refreshComponentList(parent, id, component, drawable, texture) {
 
 function refreshPropList(parent, id, prop, drawable, texture) {
     let list = parent.find(id);
-    list.find('option').each(function() {
+    list.find('option').each(function () {
         $(this).prop('selected', false);
     });
     list.find('option[data-prop="' + prop + '"][data-drawable="' + drawable + '"][data-texture="' + texture + '"]').first().prop('selected', true);
@@ -1170,8 +1167,7 @@ function refreshContentData(element, data) {
         refreshPropList(element, '#righthand', 7, data.righthand_1, data.righthand_2);
     }
     else
-    /*  Loading path for any other tab  */
-    {
+    /*  Loading path for any other tab  */ {
         for (const [key, value] of Object.entries(data)) {
             let keyId = '#' + key;
             let control = element.find(keyId);

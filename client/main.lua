@@ -1,6 +1,8 @@
 if not Config.StandAlone then
     if Config.ExtendedMode then
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        TriggerEvent('esx:getSharedObject', function(obj)
+            ESX = obj
+        end)
     else
         ESX = exports['es_extended']:getSharedObject()
     end
@@ -8,7 +10,9 @@ if not Config.StandAlone then
     AddEventHandler('esx:setPlayerData', function(key, val, last)
         if GetInvokingResource() == 'es_extended' then
             ESX.PlayerData[key] = val
-            if OnPlayerData ~= nil then OnPlayerData(key, val, last) end
+            if OnPlayerData ~= nil then
+                OnPlayerData(key, val, last)
+            end
         end
     end)
 else
@@ -30,7 +34,7 @@ isPlayerReady = false
         to black out the screen and wait a few seconds (if the special animation is disabled).
 
         This ensures the player will not see that fall or the model being changed from es_extended default.
-]]--
+]] --
 function PreparePlayer()
     if ESX.GetConfig().Multichar then
         isPlayerReady = true
@@ -63,7 +67,7 @@ function PreparePlayer()
             Citizen.Wait(0)
         end
     else
-        --TODO: Possibly use a more refined first login detection (event from server) if this does not cut it.
+        -- TODO: Possibly use a more refined first login detection (event from server) if this does not cut it.
         if not IsScreenFadedOut() then
             DoScreenFadeOut(0)
         end
@@ -239,16 +243,16 @@ function UpdateClothes(data)
     currentChar.ears_1 = data.ears_1 or currentChar.ears_1
     currentChar.ears_2 = data.ears_2 or currentChar.ears_2
 
-    SetPedComponentVariation(playerPed, 8,  currentChar.tshirt_1,   currentChar.tshirt_2,   2)
-    SetPedComponentVariation(playerPed, 11, currentChar.torso_1,    currentChar.torso_2,    2)
-    SetPedComponentVariation(playerPed, 10, currentChar.decals_1,   currentChar.decals_2,   2)
-    SetPedComponentVariation(playerPed, 3,  currentChar.arms,       currentChar.arms_2,     2)
-    SetPedComponentVariation(playerPed, 4,  currentChar.pants_1,    currentChar.pants_2,    2)
-    SetPedComponentVariation(playerPed, 6,  currentChar.shoes_1,    currentChar.shoes_2,    2)
-    SetPedComponentVariation(playerPed, 1,  currentChar.mask_1,     currentChar.mask_2,     2)
-    SetPedComponentVariation(playerPed, 9,  currentChar.bproof_1,   currentChar.bproof_2,   2)
-    SetPedComponentVariation(playerPed, 7,  currentChar.neckarm_1,  currentChar.neckarm_2,  2)
-    SetPedComponentVariation(playerPed, 5,  currentChar.bags_1,     currentChar.bags_2,     2)
+    SetPedComponentVariation(playerPed, 8, currentChar.tshirt_1, currentChar.tshirt_2, 2)
+    SetPedComponentVariation(playerPed, 11, currentChar.torso_1, currentChar.torso_2, 2)
+    SetPedComponentVariation(playerPed, 10, currentChar.decals_1, currentChar.decals_2, 2)
+    SetPedComponentVariation(playerPed, 3, currentChar.arms, currentChar.arms_2, 2)
+    SetPedComponentVariation(playerPed, 4, currentChar.pants_1, currentChar.pants_2, 2)
+    SetPedComponentVariation(playerPed, 6, currentChar.shoes_1, currentChar.shoes_2, 2)
+    SetPedComponentVariation(playerPed, 1, currentChar.mask_1, currentChar.mask_2, 2)
+    SetPedComponentVariation(playerPed, 9, currentChar.bproof_1, currentChar.bproof_2, 2)
+    SetPedComponentVariation(playerPed, 7, currentChar.neckarm_1, currentChar.neckarm_2, 2)
+    SetPedComponentVariation(playerPed, 5, currentChar.bags_1, currentChar.bags_2, 2)
 
     if currentChar.helmet_1 == -1 then
         ClearPedProp(playerPed, 0)
@@ -269,7 +273,7 @@ function UpdateClothes(data)
     end
 
     if currentChar.righthand_1 == -1 then
-        ClearPedProp(playerPed,	7)
+        ClearPedProp(playerPed, 7)
     else
         SetPedPropIndex(playerPed, 7, currentChar.righthand_1, currentChar.righthand_2, 2)
     end
@@ -337,7 +341,7 @@ AddEventHandler('skinchanger:change', function(key, val)
 
             DON'T USE IT.
     ]]
-    
+
     local changed = {}
     changed.chain_1 = 'neckarm_1'
     changed.chain_2 = 'neckarm_2'
@@ -451,10 +455,8 @@ AddEventHandler('cui_character:open', function(tabs, cancelable)
     RequestModel(femaleModelHash)
     RequestStreamedTextureDict('mparrow')
     RequestStreamedTextureDict('mpleaderboard')
-    while not HasStreamedTextureDictLoaded('mparrow') or 
-          not HasStreamedTextureDictLoaded('mpleaderboard') or 
-          not HasModelLoaded(maleModelHash) or
-          not HasModelLoaded(femaleModelHash) do
+    while not HasStreamedTextureDictLoaded('mparrow') or not HasStreamedTextureDictLoaded('mpleaderboard') or
+        not HasModelLoaded(maleModelHash) or not HasModelLoaded(femaleModelHash) do
         Wait(100)
     end
 
@@ -481,7 +483,8 @@ AddEventHandler('cui_character:open', function(tabs, cancelable)
             if not identityLoaded then
                 RequestStreamedTextureDict('pause_menu_pages_char_mom_dad')
                 RequestStreamedTextureDict('char_creator_portraits')
-                while not HasStreamedTextureDictLoaded('pause_menu_pages_char_mom_dad') or not HasStreamedTextureDictLoaded('char_creator_portraits') do
+                while not HasStreamedTextureDictLoaded('pause_menu_pages_char_mom_dad') or
+                    not HasStreamedTextureDictLoaded('char_creator_portraits') do
                     Wait(100)
                 end
                 identityLoaded = true
@@ -527,7 +530,7 @@ end)
 
 AddEventHandler('cui_character:playerPrepared', function(newplayer)
     if newplayer and (not Config.EnableESXIdentityIntegration) then
-        TriggerEvent('cui_character:open', { 'identity', 'features', 'style', 'apparel' }, false)
+        TriggerEvent('cui_character:open', {'identity', 'features', 'style', 'apparel'}, false)
     end
 end)
 
@@ -589,24 +592,24 @@ if not Config.StandAlone then
             if not IsScreenFadedOut() then
                 DoScreenFadeOut(0)
             end
-    
+
             while not isModelLoaded do
                 Citizen.Wait(0)
             end
-    
+
             SwitchOutPlayer(PlayerPedId(), 0, 1)
-    
+
             while GetPlayerSwitchState() ~= 5 do
                 Citizen.Wait(0)
             end
-    
+
             DoScreenFadeIn(500)
             while not IsScreenFadedIn() do
                 Citizen.Wait(0)
             end
-    
+
             SwitchInPlayer(PlayerPedId())
-    
+
             while GetPlayerSwitchState() ~= 12 do
                 Citizen.Wait(0)
             end
@@ -655,7 +658,7 @@ if not Config.StandAlone then
         end)
     end)
 
--- StandAlone Deployment
+    -- StandAlone Deployment
 else
     AddEventHandler('onClientResourceStart', function(resource)
         if resource == GetCurrentResourceName() then
@@ -705,7 +708,7 @@ Citizen.CreateThread(function()
                 heightmax = Config.MaxHeight,
                 yearmin = Config.LowestYear,
                 yearmax = Config.HighestYear
-            },
+            }
         })
 
         initialized = true
@@ -761,7 +764,7 @@ RegisterNUICallback('updateMakeupType', function(data, cb)
                     0 - 'None',
                     1 - 'Eye Makeup',
                     2 - 'Face Paint'
-    ]]--
+    ]] --
     local type = tonumber(data['type'])
     currentChar['makeup_type'] = type
 
@@ -792,13 +795,13 @@ RegisterNUICallback('clearMakeup', function(data, cb)
     currentChar['makeup_4'] = 255
 
     SetPedHeadOverlay(previewPed, 4, currentChar.makeup_1, currentChar.makeup_2 / 100 + 0.0) -- Eye Makeup
-    SetPedHeadOverlayColor(previewPed, 4, 0, currentChar.makeup_3, currentChar.makeup_4)     -- Eye Makeup Color
+    SetPedHeadOverlayColor(previewPed, 4, 0, currentChar.makeup_3, currentChar.makeup_4) -- Eye Makeup Color
 
     if data['clearblusher'] then
         currentChar['blush_1'] = 255
         currentChar['blush_3'] = 0
-        SetPedHeadOverlay(previewPed, 5, currentChar.blush_1, currentChar.blush_2 / 100 + 0.0)   -- Blusher
-        SetPedHeadOverlayColor(previewPed, 5, 2, currentChar.blush_3, 255)                       -- Blusher Color
+        SetPedHeadOverlay(previewPed, 5, currentChar.blush_1, currentChar.blush_2 / 100 + 0.0) -- Blusher
+        SetPedHeadOverlayColor(previewPed, 5, 2, currentChar.blush_3, 255) -- Blusher Color
     end
 end)
 
@@ -848,7 +851,8 @@ RegisterNUICallback('updateHeadBlend', function(data, cb)
     local weightFace = currentChar.face_md_weight / 100 + 0.0
     local weightSkin = currentChar.skin_md_weight / 100 + 0.0
 
-    SetPedHeadBlendData(previewPed, currentChar.mom, currentChar.dad, 0, currentChar.mom, currentChar.dad, 0, weightFace, weightSkin, 0.0, false)
+    SetPedHeadBlendData(previewPed, currentChar.mom, currentChar.dad, 0, currentChar.mom, currentChar.dad, 0,
+        weightFace, weightSkin, 0.0, false)
 end)
 
 RegisterNUICallback('updateFaceFeature', function(data, cb)
@@ -952,14 +956,14 @@ RegisterNUICallback('updateApparelComponent', function(data, cb)
     -- Some clothes have 'forced components' that change torso and other parts.
     -- adapted from: https://gist.github.com/root-cause/3b80234367b0c856d60bf5cb4b826f86
     local hash = GetHashNameForComponent(previewPed, component, currentChar[drawableKey], currentChar[textureKey])
-    --print('main component hash ' .. hash)
+    -- print('main component hash ' .. hash)
     local fcDrawable, fcTexture, fcType = -1, -1, -1
     local fcCount = GetShopPedApparelForcedComponentCount(hash) - 1
-    --print('found ' .. fcCount + 1 .. ' forced components')
+    -- print('found ' .. fcCount + 1 .. ' forced components')
     for fcId = 0, fcCount do
         local fcNameHash, fcEnumVal, f5, f7, f8 = -1, -1, -1, -1, -1
         fcNameHash, fcEnumVal, fcType = GetForcedComponent(hash, fcId)
-        --print('forced component [' .. fcId .. ']: nameHash: ' .. fcNameHash .. ', enumVal: ' .. fcEnumVal .. ', type: ' .. fcType--[[.. ', field5: ' .. f5 .. ', field7: ' .. f7 .. ', field8: ' .. f8 --]])
+        -- print('forced component [' .. fcId .. ']: nameHash: ' .. fcNameHash .. ', enumVal: ' .. fcEnumVal .. ', type: ' .. fcType--[[.. ', field5: ' .. f5 .. ', field7: ' .. f7 .. ', field8: ' .. f8 --]])
 
         -- only set torsos, using other types here seems to glitch out
         if fcType == 3 then
@@ -1098,7 +1102,10 @@ function GetColorData(indexes, isHair)
     for i, index in ipairs(indexes) do
         local r, g, b = GetRgbColor(index)
         local hex = RGBToHexCode(r, g, b)
-        table.insert(result, { index = index, hex = hex })
+        table.insert(result, {
+            index = index,
+            hex = hex
+        })
     end
 
     return result
@@ -1184,7 +1191,7 @@ function GetComponentsData(id)
                                 end
                             end
                         end
-    
+
                         if not blacklisted then
                             table.insert(result, {
                                 name = label,
@@ -1272,7 +1279,7 @@ function GetClothesData()
         ears = {},
         glasses = {},
         lefthands = {},
-        righthands = {},
+        righthands = {}
     }
 
     result.topsover = GetComponentsData(11)
@@ -1281,7 +1288,7 @@ function GetClothesData()
     result.shoes = GetComponentsData(6)
     -- result.bags = GetComponentsData(5)   -- there seems to be no named components in this category
     result.masks = GetComponentsData(1)
-    result.neckarms = GetComponentsData(7)  -- chains/ties/suspenders/bangles
+    result.neckarms = GetComponentsData(7) -- chains/ties/suspenders/bangles
 
     result.hats = GetPropsData(0)
     result.ears = GetPropsData(2)
@@ -1478,94 +1485,94 @@ function ApplySkinToPed(ped, skin)
     SetPedHeadBlendData(ped, skin.mom, skin.dad, 0, skin.mom, skin.dad, 0, weightFace, weightSkin, 0.0, false)
 
     -- Facial Features
-    SetPedFaceFeature(ped, 0,  (skin.nose_1 / 100)         + 0.0)  -- Nose Width
-    SetPedFaceFeature(ped, 1,  (skin.nose_2 / 100)         + 0.0)  -- Nose Peak Height
-    SetPedFaceFeature(ped, 2,  (skin.nose_3 / 100)         + 0.0)  -- Nose Peak Length
-    SetPedFaceFeature(ped, 3,  (skin.nose_4 / 100)         + 0.0)  -- Nose Bone Height
-    SetPedFaceFeature(ped, 4,  (skin.nose_5 / 100)         + 0.0)  -- Nose Peak Lowering
-    SetPedFaceFeature(ped, 5,  (skin.nose_6 / 100)         + 0.0)  -- Nose Bone Twist
-    SetPedFaceFeature(ped, 6,  (skin.eyebrows_5 / 100)     + 0.0)  -- Eyebrow height
-    SetPedFaceFeature(ped, 7,  (skin.eyebrows_6 / 100)     + 0.0)  -- Eyebrow depth
-    SetPedFaceFeature(ped, 8,  (skin.cheeks_1 / 100)       + 0.0)  -- Cheekbones Height
-    SetPedFaceFeature(ped, 9,  (skin.cheeks_2 / 100)       + 0.0)  -- Cheekbones Width
-    SetPedFaceFeature(ped, 10, (skin.cheeks_3 / 100)       + 0.0)  -- Cheeks Width
-    SetPedFaceFeature(ped, 11, (skin.eye_squint / 100)     + 0.0)  -- Eyes squint
-    SetPedFaceFeature(ped, 12, (skin.lip_thickness / 100)  + 0.0)  -- Lip Fullness
-    SetPedFaceFeature(ped, 13, (skin.jaw_1 / 100)          + 0.0)  -- Jaw Bone Width
-    SetPedFaceFeature(ped, 14, (skin.jaw_2 / 100)          + 0.0)  -- Jaw Bone Length
-    SetPedFaceFeature(ped, 15, (skin.chin_1 / 100)         + 0.0)  -- Chin Height
-    SetPedFaceFeature(ped, 16, (skin.chin_2 / 100)         + 0.0)  -- Chin Length
-    SetPedFaceFeature(ped, 17, (skin.chin_3 / 100)         + 0.0)  -- Chin Width
-    SetPedFaceFeature(ped, 18, (skin.chin_4 / 100)         + 0.0)  -- Chin Hole Size
-    SetPedFaceFeature(ped, 19, (skin.neck_thickness / 100) + 0.0)  -- Neck Thickness
+    SetPedFaceFeature(ped, 0, (skin.nose_1 / 100) + 0.0) -- Nose Width
+    SetPedFaceFeature(ped, 1, (skin.nose_2 / 100) + 0.0) -- Nose Peak Height
+    SetPedFaceFeature(ped, 2, (skin.nose_3 / 100) + 0.0) -- Nose Peak Length
+    SetPedFaceFeature(ped, 3, (skin.nose_4 / 100) + 0.0) -- Nose Bone Height
+    SetPedFaceFeature(ped, 4, (skin.nose_5 / 100) + 0.0) -- Nose Peak Lowering
+    SetPedFaceFeature(ped, 5, (skin.nose_6 / 100) + 0.0) -- Nose Bone Twist
+    SetPedFaceFeature(ped, 6, (skin.eyebrows_5 / 100) + 0.0) -- Eyebrow height
+    SetPedFaceFeature(ped, 7, (skin.eyebrows_6 / 100) + 0.0) -- Eyebrow depth
+    SetPedFaceFeature(ped, 8, (skin.cheeks_1 / 100) + 0.0) -- Cheekbones Height
+    SetPedFaceFeature(ped, 9, (skin.cheeks_2 / 100) + 0.0) -- Cheekbones Width
+    SetPedFaceFeature(ped, 10, (skin.cheeks_3 / 100) + 0.0) -- Cheeks Width
+    SetPedFaceFeature(ped, 11, (skin.eye_squint / 100) + 0.0) -- Eyes squint
+    SetPedFaceFeature(ped, 12, (skin.lip_thickness / 100) + 0.0) -- Lip Fullness
+    SetPedFaceFeature(ped, 13, (skin.jaw_1 / 100) + 0.0) -- Jaw Bone Width
+    SetPedFaceFeature(ped, 14, (skin.jaw_2 / 100) + 0.0) -- Jaw Bone Length
+    SetPedFaceFeature(ped, 15, (skin.chin_1 / 100) + 0.0) -- Chin Height
+    SetPedFaceFeature(ped, 16, (skin.chin_2 / 100) + 0.0) -- Chin Length
+    SetPedFaceFeature(ped, 17, (skin.chin_3 / 100) + 0.0) -- Chin Width
+    SetPedFaceFeature(ped, 18, (skin.chin_4 / 100) + 0.0) -- Chin Hole Size
+    SetPedFaceFeature(ped, 19, (skin.neck_thickness / 100) + 0.0) -- Neck Thickness
 
     -- Appearance
-    SetPedComponentVariation(ped, 2, skin.hair_1, skin.hair_2, 2)                  -- Hair Style
-    SetPedHairColor(ped, skin.hair_color_1, skin.hair_color_2)                     -- Hair Color
-    SetPedHeadOverlay(ped, 2, skin.eyebrows_1, skin.eyebrows_2 / 100 + 0.0)        -- Eyebrow Style + Opacity
-    SetPedHeadOverlayColor(ped, 2, 1, skin.eyebrows_3, skin.eyebrows_4)            -- Eyebrow Color
-    SetPedHeadOverlay(ped, 1, skin.beard_1, skin.beard_2 / 100 + 0.0)              -- Beard Style + Opacity
-    SetPedHeadOverlayColor(ped, 1, 1, skin.beard_3, skin.beard_4)                  -- Beard Color
+    SetPedComponentVariation(ped, 2, skin.hair_1, skin.hair_2, 2) -- Hair Style
+    SetPedHairColor(ped, skin.hair_color_1, skin.hair_color_2) -- Hair Color
+    SetPedHeadOverlay(ped, 2, skin.eyebrows_1, skin.eyebrows_2 / 100 + 0.0) -- Eyebrow Style + Opacity
+    SetPedHeadOverlayColor(ped, 2, 1, skin.eyebrows_3, skin.eyebrows_4) -- Eyebrow Color
+    SetPedHeadOverlay(ped, 1, skin.beard_1, skin.beard_2 / 100 + 0.0) -- Beard Style + Opacity
+    SetPedHeadOverlayColor(ped, 1, 1, skin.beard_3, skin.beard_4) -- Beard Color
 
-    SetPedHeadOverlay(ped, 0, skin.blemishes_1, skin.blemishes_2 / 100 + 0.0)      -- Skin blemishes + Opacity
-    SetPedHeadOverlay(ped, 12, skin.bodyb_3, skin.bodyb_4 / 100 + 0.0)             -- Skin blemishes body effect + Opacity
+    SetPedHeadOverlay(ped, 0, skin.blemishes_1, skin.blemishes_2 / 100 + 0.0) -- Skin blemishes + Opacity
+    SetPedHeadOverlay(ped, 12, skin.bodyb_3, skin.bodyb_4 / 100 + 0.0) -- Skin blemishes body effect + Opacity
 
-    SetPedHeadOverlay(ped, 11, skin.bodyb_1, skin.bodyb_2 / 100 + 0.0)             -- Body Blemishes + Opacity
+    SetPedHeadOverlay(ped, 11, skin.bodyb_1, skin.bodyb_2 / 100 + 0.0) -- Body Blemishes + Opacity
 
-    SetPedHeadOverlay(ped, 3, skin.age_1, skin.age_2 / 100 + 0.0)                  -- Age + opacity
-    SetPedHeadOverlay(ped, 6, skin.complexion_1, skin.complexion_2 / 100 + 0.0)    -- Complexion + Opacity
-    SetPedHeadOverlay(ped, 9, skin.moles_1, skin.moles_2 / 100 + 0.0)              -- Moles/Freckles + Opacity
-    SetPedHeadOverlay(ped, 7, skin.sun_1, skin.sun_2 / 100 + 0.0)                  -- Sun Damage + Opacity
-    SetPedEyeColor(ped, skin.eye_color)                                            -- Eyes Color
-    SetPedHeadOverlay(ped, 4, skin.makeup_1, skin.makeup_2 / 100 + 0.0)            -- Makeup + Opacity
-    SetPedHeadOverlayColor(ped, 4, 0, skin.makeup_3, skin.makeup_4)                -- Makeup Color
-    SetPedHeadOverlay(ped, 5, skin.blush_1, skin.blush_2 / 100 + 0.0)              -- Blush + Opacity
-    SetPedHeadOverlayColor(ped, 5, 2,	skin.blush_3)                                -- Blush Color
-    SetPedHeadOverlay(ped, 8, skin.lipstick_1, skin.lipstick_2 / 100 + 0.0)        -- Lipstick + Opacity
-    SetPedHeadOverlayColor(ped, 8, 2, skin.lipstick_3, skin.lipstick_4)            -- Lipstick Color
-    SetPedHeadOverlay(ped, 10, skin.chest_1, skin.chest_2 / 100 + 0.0)             -- Chest Hair + Opacity
-    SetPedHeadOverlayColor(ped, 10, 1, skin.chest_3, skin.chest_4)                 -- Chest Hair Color
+    SetPedHeadOverlay(ped, 3, skin.age_1, skin.age_2 / 100 + 0.0) -- Age + opacity
+    SetPedHeadOverlay(ped, 6, skin.complexion_1, skin.complexion_2 / 100 + 0.0) -- Complexion + Opacity
+    SetPedHeadOverlay(ped, 9, skin.moles_1, skin.moles_2 / 100 + 0.0) -- Moles/Freckles + Opacity
+    SetPedHeadOverlay(ped, 7, skin.sun_1, skin.sun_2 / 100 + 0.0) -- Sun Damage + Opacity
+    SetPedEyeColor(ped, skin.eye_color) -- Eyes Color
+    SetPedHeadOverlay(ped, 4, skin.makeup_1, skin.makeup_2 / 100 + 0.0) -- Makeup + Opacity
+    SetPedHeadOverlayColor(ped, 4, 0, skin.makeup_3, skin.makeup_4) -- Makeup Color
+    SetPedHeadOverlay(ped, 5, skin.blush_1, skin.blush_2 / 100 + 0.0) -- Blush + Opacity
+    SetPedHeadOverlayColor(ped, 5, 2, skin.blush_3) -- Blush Color
+    SetPedHeadOverlay(ped, 8, skin.lipstick_1, skin.lipstick_2 / 100 + 0.0) -- Lipstick + Opacity
+    SetPedHeadOverlayColor(ped, 8, 2, skin.lipstick_3, skin.lipstick_4) -- Lipstick Color
+    SetPedHeadOverlay(ped, 10, skin.chest_1, skin.chest_2 / 100 + 0.0) -- Chest Hair + Opacity
+    SetPedHeadOverlayColor(ped, 10, 1, skin.chest_3, skin.chest_4) -- Chest Hair Color
 
     -- Clothing and Accessories
-    SetPedComponentVariation(ped, 8,  skin.tshirt_1, skin.tshirt_2, 2)        -- Undershirts
-    SetPedComponentVariation(ped, 11, skin.torso_1,  skin.torso_2,  2)        -- Jackets
-    SetPedComponentVariation(ped, 3,  skin.arms,     skin.arms_2,   2)        -- Torsos
-    SetPedComponentVariation(ped, 10, skin.decals_1, skin.decals_2, 2)        -- Decals
-    SetPedComponentVariation(ped, 4,  skin.pants_1,  skin.pants_2,  2)        -- Legs
-    SetPedComponentVariation(ped, 6,  skin.shoes_1,  skin.shoes_2,  2)        -- Shoes
-    SetPedComponentVariation(ped, 1,  skin.mask_1,   skin.mask_2,   2)        -- Masks
-    SetPedComponentVariation(ped, 9,  skin.bproof_1, skin.bproof_2, 2)        -- Vests
-    SetPedComponentVariation(ped, 7,  skin.neckarm_1,  skin.neckarm_2,  2)    -- Necklaces/Chains/Ties/Suspenders
-    SetPedComponentVariation(ped, 5,  skin.bags_1,   skin.bags_2,   2)        -- Bags
+    SetPedComponentVariation(ped, 8, skin.tshirt_1, skin.tshirt_2, 2) -- Undershirts
+    SetPedComponentVariation(ped, 11, skin.torso_1, skin.torso_2, 2) -- Jackets
+    SetPedComponentVariation(ped, 3, skin.arms, skin.arms_2, 2) -- Torsos
+    SetPedComponentVariation(ped, 10, skin.decals_1, skin.decals_2, 2) -- Decals
+    SetPedComponentVariation(ped, 4, skin.pants_1, skin.pants_2, 2) -- Legs
+    SetPedComponentVariation(ped, 6, skin.shoes_1, skin.shoes_2, 2) -- Shoes
+    SetPedComponentVariation(ped, 1, skin.mask_1, skin.mask_2, 2) -- Masks
+    SetPedComponentVariation(ped, 9, skin.bproof_1, skin.bproof_2, 2) -- Vests
+    SetPedComponentVariation(ped, 7, skin.neckarm_1, skin.neckarm_2, 2) -- Necklaces/Chains/Ties/Suspenders
+    SetPedComponentVariation(ped, 5, skin.bags_1, skin.bags_2, 2) -- Bags
 
     if skin.helmet_1 == -1 then
         ClearPedProp(ped, 0)
     else
-        SetPedPropIndex(ped, 0, skin.helmet_1, skin.helmet_2, 2)          -- Hats
+        SetPedPropIndex(ped, 0, skin.helmet_1, skin.helmet_2, 2) -- Hats
     end
 
     if skin.glasses_1 == -1 then
         ClearPedProp(ped, 1)
     else
-        SetPedPropIndex(ped, 1, skin.glasses_1, skin.glasses_2, 2)        -- Glasses
+        SetPedPropIndex(ped, 1, skin.glasses_1, skin.glasses_2, 2) -- Glasses
     end
 
     if skin.lefthand_1 == -1 then
         ClearPedProp(ped, 6)
     else
-        SetPedPropIndex(ped, 6, skin.lefthand_1, skin.lefthand_2, 2)      -- Left Hand Accessory
+        SetPedPropIndex(ped, 6, skin.lefthand_1, skin.lefthand_2, 2) -- Left Hand Accessory
     end
 
     if skin.righthand_1 == -1 then
-        ClearPedProp(ped,	7)
+        ClearPedProp(ped, 7)
     else
-        SetPedPropIndex(ped, 7, skin.righthand_1, skin.righthand_2, 2)    -- Right Hand Accessory
+        SetPedPropIndex(ped, 7, skin.righthand_1, skin.righthand_2, 2) -- Right Hand Accessory
     end
 
     if skin.ears_1 == -1 then
         ClearPedProp(ped, 2)
     else
-        SetPedPropIndex (ped, 2, skin.ears_1, skin.ears_2, 2)             -- Ear Accessory
+        SetPedPropIndex(ped, 2, skin.ears_1, skin.ears_2, 2) -- Ear Accessory
     end
 end
 
@@ -1607,7 +1614,8 @@ function UpdateClosestLocation(locations, type)
     local pedPosition = GetEntityCoords(PlayerPedId())
     for i = 1, #locations do
         local loc = locations[i]
-        local distance = GetDistanceBetweenCoords(pedPosition.x, pedPosition.y, pedPosition.z, loc[1], loc[2], loc[3], false)
+        local distance = GetDistanceBetweenCoords(pedPosition.x, pedPosition.y, pedPosition.z, loc[1], loc[2], loc[3],
+            false)
         if (distToClosest == nil or closestCoords == nil) or (distance < distToClosest) or (closestCoords == loc) then
             distToClosest = distance
             closestType = type
@@ -1650,21 +1658,10 @@ Citizen.CreateThread(function()
         --  TODO: possibly charge money for use
 
         if inMarkerRange then
-            DrawMarker(
-                20,
-                closestCoords.x, closestCoords.y, closestCoords.z + 1.0,
-                0.0, 0.0, 0.0,
-                0.0, 0.0, 0.0,
-                1.0, 1.0, 1.0,
-                45, 110, 185, 128,
-                true,   -- move up and down
-                false,
-                2,
-                true,  -- rotate
-                nil,
-                nil,
-                false
-            )
+            DrawMarker(20, closestCoords.x, closestCoords.y, closestCoords.z + 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+                1.0, 1.0, 45, 110, 185, 128, true, -- move up and down
+                false, 2, true, -- rotate
+                nil, nil, false)
         end
 
         if distToClosest < 1.0 and (not isVisible) then
@@ -1676,22 +1673,22 @@ Citizen.CreateThread(function()
                 if closestType == 'clothing' then
                     DisplayTooltip('use clothing store.')
                     if IsControlJustPressed(1, 38) then
-                        TriggerEvent('cui_character:open', { 'apparel' })
+                        TriggerEvent('cui_character:open', {'apparel'})
                     end
                 elseif closestType == 'barber' then
                     DisplayTooltip('use barber shop.')
                     if IsControlJustPressed(1, 38) then
-                        TriggerEvent('cui_character:open', { 'style' })
+                        TriggerEvent('cui_character:open', {'style'})
                     end
                 elseif closestType == 'surgery' then
                     DisplayTooltip('use platic surgery unit.')
                     if IsControlJustPressed(1, 38) then
-                        TriggerEvent('cui_character:open', { 'features' })
+                        TriggerEvent('cui_character:open', {'features'})
                     end
                 elseif closestType == 'identity' then
                     DisplayTooltip('change your identity.')
                     if IsControlJustPressed(1, 38) then
-                        TriggerEvent('cui_character:open', { 'identity' })
+                        TriggerEvent('cui_character:open', {'identity'})
                     end
                 end
             end
@@ -1813,7 +1810,7 @@ if Config.EnableESXIdentityIntegration then
             preparingSkin = false
         end
         if not isDead then
-            TriggerEvent('cui_character:open', { 'identity', 'features', 'style', 'apparel' }, false)
+            TriggerEvent('cui_character:open', {'identity', 'features', 'style', 'apparel'}, false)
         end
     end)
 
@@ -1827,7 +1824,7 @@ if Config.EnableESXIdentityIntegration then
                 -- ESX.ShowNotification(_U('thank_you_for_registering')) TODO: Notification (or sound effect)
                 TriggerEvent('cui_character:setCurrentIdentity', data)
                 TriggerEvent('cui_character:close', true)
-                if not ESX.GetConfig().Multichar then 
+                if not ESX.GetConfig().Multichar then
                     TriggerEvent('esx_skin:playerRegistered')
                 else
                     firstCharacter = false
@@ -1843,11 +1840,11 @@ if Config.EnableESXIdentityIntegration then
             if callback then
                 TriggerEvent('cui_character:setCurrentIdentity', data)
                 TriggerEvent('cui_character:close', true)
-                if not ESX.GetConfig().Multichar then 
+                if not ESX.GetConfig().Multichar then
                     TriggerEvent('esx_skin:playerRegistered')
                 end
             else
-                --TODO: Notification (or sound effect)
+                -- TODO: Notification (or sound effect)
             end
         end, data)
     end)

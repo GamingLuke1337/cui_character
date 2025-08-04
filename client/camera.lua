@@ -1,21 +1,21 @@
 Camera = {}
 
-Camera.entity       = nil
-Camera.position     = vector3(0.0, 0.0, 0.0)
-Camera.currentView  = 'head'
-Camera.active       = false
-Camera.updateRot    = false
-Camera.updateZoom   = false
-Camera.radius       = 1.25
-Camera.angleX       = 30.0
-Camera.angleY       = 0.0
-Camera.mouseX       = 0
-Camera.mouseY       = 0
+Camera.entity = nil
+Camera.position = vector3(0.0, 0.0, 0.0)
+Camera.currentView = 'head'
+Camera.active = false
+Camera.updateRot = false
+Camera.updateZoom = false
+Camera.radius = 1.25
+Camera.angleX = 30.0
+Camera.angleY = 0.0
+Camera.mouseX = 0
+Camera.mouseY = 0
 
-Camera.radiusMin    = 1.0
-Camera.radiusMax    = 2.25
-Camera.angleYMin    = -30.0
-Camera.angleYMax    = 80.0
+Camera.radiusMin = 1.0
+Camera.radiusMax = 2.25
+Camera.angleYMin = -30.0
+Camera.angleYMax = 80.0
 
 Camera.Activate = function(delay)
     if delay then
@@ -55,22 +55,22 @@ Camera.SetView = function(view)
     local boneIndex = -1
     if view == 'head' then
         boneIndex = 31086
-        Camera.radiusMin    = 0.8
-        Camera.radiusMax    = 1.0
-        Camera.angleYMin    = 40.0
-        Camera.angleYMax    = 60.0
+        Camera.radiusMin = 0.8
+        Camera.radiusMax = 1.0
+        Camera.angleYMin = 40.0
+        Camera.angleYMax = 60.0
     elseif view == 'body' then
         boneIndex = 11816
-        Camera.radiusMin    = 1.0
-        Camera.radiusMax    = 2.0
-        Camera.angleYMin    = 0.0
-        Camera.angleYMax    = 35.0
-    elseif view == 'legs' then 
+        Camera.radiusMin = 1.0
+        Camera.radiusMax = 2.0
+        Camera.angleYMin = 0.0
+        Camera.angleYMax = 35.0
+    elseif view == 'legs' then
         boneIndex = 46078
-        Camera.radiusMin    = 1.1
-        Camera.radiusMax    = 1.25
-        Camera.angleYMin    = -30.0
-        Camera.angleYMax    = 10.0
+        Camera.radiusMin = 1.1
+        Camera.radiusMax = 1.25
+        Camera.angleYMin = -30.0
+        Camera.angleYMax = 10.0
     end
 
     Camera.radius = Camera.radiusMin
@@ -98,11 +98,16 @@ Camera.CalculateMaxRadius = function()
     local playerPed = PlayerPedId()
     local pedCoords = GetEntityCoords(previewPed)
 
-    local behindX = pedCoords.x + ((Cos(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Cos(Camera.angleX))) / 2 * (Camera.radius + 0.5)
-    local behindY = pedCoords.x + ((Sin(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Sin(Camera.angleX))) / 2 * (Camera.radius + 0.5)
+    local behindX = pedCoords.x +
+                        ((Cos(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Cos(Camera.angleX))) / 2 *
+                        (Camera.radius + 0.5)
+    local behindY = pedCoords.x +
+                        ((Sin(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Sin(Camera.angleX))) / 2 *
+                        (Camera.radius + 0.5)
     local behindZ = ((Sin(Camera.angleY))) * (Camera.radius + 0.5)
 
-    local testRay = StartShapeTestRay(pedCoords.x, pedCoords.y, pedCoords.z + 0.5, behindX, behindY, behindZ, -1, playerPed, 0)
+    local testRay = StartShapeTestRay(pedCoords.x, pedCoords.y, pedCoords.z + 0.5, behindX, behindY, behindZ, -1,
+        playerPed, 0)
     local _, hit, hitCoords = GetShapeTestResult(testRay)
     local hitDist = Vdist(pedCoords.x, pedCoords.y, pedCoords.z + 0.5, hitCoords)
 
@@ -126,9 +131,11 @@ Camera.CalculatePosition = function(adjustedAngle)
     end
 
     local radiusMax = Camera.CalculateMaxRadius()
-    
-    local offsetX = ((Cos(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Cos(Camera.angleX))) / 2 * radiusMax
-    local offsetY = ((Sin(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Sin(Camera.angleX))) / 2 * radiusMax
+
+    local offsetX = ((Cos(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Cos(Camera.angleX))) / 2 *
+                        radiusMax
+    local offsetY = ((Sin(Camera.angleX) * Cos(Camera.angleY)) + (Cos(Camera.angleY) * Sin(Camera.angleX))) / 2 *
+                        radiusMax
     local offsetZ = ((Sin(Camera.angleY))) * radiusMax
 
     local pedCoords = GetEntityCoords(previewPed)
@@ -136,7 +143,7 @@ Camera.CalculatePosition = function(adjustedAngle)
     return vector3(pedCoords.x + offsetX, pedCoords.y + offsetY, pedCoords.z + offsetZ)
 end
 
-Citizen.CreateThread(function() 
+Citizen.CreateThread(function()
     while true do
         if Camera.active or isInterfaceOpening or (not isPlayerReady) then
             DisableFirstPersonCamThisFrame()
@@ -150,24 +157,24 @@ Citizen.CreateThread(function()
             DisableControlAction(2, 34, true)
             DisableControlAction(2, 35, true)
 
-            DisableControlAction(0, 25,  true)
-            DisableControlAction(0, 24,  true)
-            DisableControlAction(0, 1,   true)
-            DisableControlAction(0, 2,   true)
+            DisableControlAction(0, 25, true)
+            DisableControlAction(0, 24, true)
+            DisableControlAction(0, 1, true)
+            DisableControlAction(0, 2, true)
             DisableControlAction(0, 106, true)
             DisableControlAction(0, 142, true)
-            DisableControlAction(0, 30,  true)
-            DisableControlAction(0, 31,  true)
-            DisableControlAction(0, 21,  true)
-            DisableControlAction(0, 47,  true)
-            DisableControlAction(0, 58,  true)
+            DisableControlAction(0, 30, true)
+            DisableControlAction(0, 31, true)
+            DisableControlAction(0, 21, true)
+            DisableControlAction(0, 47, true)
+            DisableControlAction(0, 58, true)
             DisableControlAction(0, 263, true)
             DisableControlAction(0, 264, true)
             DisableControlAction(0, 257, true)
             DisableControlAction(0, 140, true)
             DisableControlAction(0, 141, true)
             DisableControlAction(0, 143, true)
-            DisableControlAction(0, 75,  true)
+            DisableControlAction(0, 75, true)
 
             DisableControlAction(27, 75, true)
 

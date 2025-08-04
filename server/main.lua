@@ -1,7 +1,7 @@
 ESX = nil
 
 local function getPlayerLicense(source)
-    for k,v in ipairs(GetPlayerIdentifiers(source)) do
+    for k, v in ipairs(GetPlayerIdentifiers(source)) do
         if string.match(v, 'license:') then
             return string.sub(v, 9)
         end
@@ -11,7 +11,9 @@ end
 
 if not Config.StandAlone then
     if Config.ExtendedMode then
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        TriggerEvent('esx:getSharedObject', function(obj)
+            ESX = obj
+        end)
     else
         ESX = exports['es_extended']:getSharedObject()
     end
@@ -92,7 +94,7 @@ if not Config.StandAlone then
                 local skin = nil
 
                 local jobSkin = {
-                    skin_male   = xPlayer.job.skin_male,
+                    skin_male = xPlayer.job.skin_male,
                     skin_female = xPlayer.job.skin_female
                 }
 
@@ -112,7 +114,7 @@ if not Config.StandAlone then
         end
 
         function checkForNumbers(str)
-            return (string.match(str,"%d"))
+            return (string.match(str, "%d"))
         end
 
         function checkDate(str)
@@ -121,7 +123,8 @@ if not Config.StandAlone then
                 m = tonumber(m)
                 d = tonumber(d)
                 y = tonumber(y)
-                if ((d <= 0) or (d > 31)) or ((m <= 0) or (m > 12)) or ((y <= Config.LowestYear) or (y > Config.HighestYear)) then
+                if ((d <= 0) or (d > 31)) or ((m <= 0) or (m > 12)) or
+                    ((y <= Config.LowestYear) or (y > Config.HighestYear)) then
                     return false
                 elseif m == 4 or m == 6 or m == 9 or m == 11 then
                     if d > 30 then
@@ -130,7 +133,7 @@ if not Config.StandAlone then
                         return true
                     end
                 elseif m == 2 then
-                    if y%400 == 0 or (y%100 ~= 0 and y%4 == 0) then
+                    if y % 400 == 0 or (y % 100 ~= 0 and y % 4 == 0) then
                         if d > 29 then
                             return false
                         else
@@ -203,32 +206,35 @@ if not Config.StandAlone then
             local formattedName = convertFirstLetterToUpper(loweredName)
             return formattedName
         end
-        
+
         function convertToLowerCase(str)
             return string.lower(str)
         end
-        
+
         function convertFirstLetterToUpper(str)
             return str:gsub("^%l", string.upper)
         end
 
         function saveIdentityToDatabase(identifier, identity)
-            MySQL.Sync.execute('UPDATE users SET firstname = @firstname, lastname = @lastname, dateofbirth = @dateofbirth, sex = @sex, height = @height WHERE identifier = @identifier', {
-                ['@identifier']  = identifier,
-                ['@firstname'] = identity.firstName,
-                ['@lastname'] = identity.lastName,
-                ['@dateofbirth'] = identity.dateOfBirth,
-                ['@sex'] = identity.sex,
-                ['@height'] = identity.height
-            })
+            MySQL.Sync.execute(
+                'UPDATE users SET firstname = @firstname, lastname = @lastname, dateofbirth = @dateofbirth, sex = @sex, height = @height WHERE identifier = @identifier',
+                {
+                    ['@identifier'] = identifier,
+                    ['@firstname'] = identity.firstName,
+                    ['@lastname'] = identity.lastName,
+                    ['@dateofbirth'] = identity.dateOfBirth,
+                    ['@sex'] = identity.sex,
+                    ['@height'] = identity.height
+                })
         end
         -- end of copied identity functions
 
         ESX.RegisterServerCallback('cui_character:updateIdentity', function(source, cb, data)
             local xPlayer = ESX.GetPlayerFromId(source)
-            
+
             if xPlayer then
-                if checkNameFormat(data.firstname) and checkNameFormat(data.lastname) and checkSexFormat(data.sex) and checkDOBFormat(data.dateofbirth) and checkHeightFormat(data.height) then
+                if checkNameFormat(data.firstname) and checkNameFormat(data.lastname) and checkSexFormat(data.sex) and
+                    checkDOBFormat(data.dateofbirth) and checkHeightFormat(data.height) then
                     local currentIdentity = {
                         firstName = formatName(data.firstname),
                         lastName = formatName(data.lastname),
@@ -236,21 +242,22 @@ if not Config.StandAlone then
                         sex = data.sex,
                         height = data.height
                     }
-    
+
                     xPlayer.setName(('%s %s'):format(currentIdentity.firstName, currentIdentity.lastName))
                     xPlayer.set('firstName', currentIdentity.firstName)
                     xPlayer.set('lastName', currentIdentity.lastName)
                     xPlayer.set('dateofbirth', currentIdentity.dateOfBirth)
                     xPlayer.set('sex', currentIdentity.sex)
                     xPlayer.set('height', currentIdentity.height)
-    
+
                     saveIdentityToDatabase(xPlayer.identifier, currentIdentity)
                     cb(true)
                 else
                     cb(false)
                 end
             else
-                if ESX.GetConfig().Multichar and checkNameFormat(data.firstname) and checkNameFormat(data.lastname) and checkSexFormat(data.sex) and checkDOBFormat(data.dateofbirth) and checkHeightFormat(data.height) then
+                if ESX.GetConfig().Multichar and checkNameFormat(data.firstname) and checkNameFormat(data.lastname) and
+                    checkSexFormat(data.sex) and checkDOBFormat(data.dateofbirth) and checkHeightFormat(data.height) then
                     cb(true)
                 end
             end
@@ -259,55 +266,73 @@ if not Config.StandAlone then
         ESX.RegisterServerCallback('cui_character:getIdentity', function(source, cb)
             local xPlayer = ESX.GetPlayerFromId(source)
             MySQL.ready(function()
-                MySQL.Async.fetchAll('SELECT firstname, lastname, dateofbirth, sex, height FROM users WHERE identifier = @identifier', {
-                    ['@identifier'] = xPlayer.identifier
-                }, function(users)
-                    local user = users[1]
-                    local identity = {}
+                MySQL.Async.fetchAll(
+                    'SELECT firstname, lastname, dateofbirth, sex, height FROM users WHERE identifier = @identifier', {
+                        ['@identifier'] = xPlayer.identifier
+                    }, function(users)
+                        local user = users[1]
+                        local identity = {}
 
-                    if user ~= nil then
-                        for k, v in pairs(user) do
-                            identity[k] = v
+                        if user ~= nil then
+                            for k, v in pairs(user) do
+                                identity[k] = v
+                            end
                         end
-                    end
 
-                    cb(identity)
-                end)
+                        cb(identity)
+                    end)
             end)
         end)
     end
 
     ESX.RegisterCommand('character', 'admin', function(xPlayer, args, showError)
-        xPlayer.triggerEvent('cui_character:open', { 'identity', 'features', 'style', 'apparel' })
-        end, true, {help = 'Open full character editor.', validate = true, arguments = {}
+        xPlayer.triggerEvent('cui_character:open', {'identity', 'features', 'style', 'apparel'})
+    end, true, {
+        help = 'Open full character editor.',
+        validate = true,
+        arguments = {}
     })
 
     ESX.RegisterCommand('identity', 'admin', function(xPlayer, args, showError)
-        xPlayer.triggerEvent('cui_character:open', { 'identity' })
-        end, true, {help = 'Open character identity editor.', validate = true, arguments = {}
+        xPlayer.triggerEvent('cui_character:open', {'identity'})
+    end, true, {
+        help = 'Open character identity editor.',
+        validate = true,
+        arguments = {}
     })
 
     ESX.RegisterCommand('features', 'admin', function(xPlayer, args, showError)
-        xPlayer.triggerEvent('cui_character:open', { 'features' })
-        end, true, {help = 'Open character physical features editor.', validate = true, arguments = {}
+        xPlayer.triggerEvent('cui_character:open', {'features'})
+    end, true, {
+        help = 'Open character physical features editor.',
+        validate = true,
+        arguments = {}
     })
 
     ESX.RegisterCommand('style', 'admin', function(xPlayer, args, showError)
-        xPlayer.triggerEvent('cui_character:open', { 'style' })
-        end, true, {help = 'Open character style editor.', validate = true, arguments = {}
+        xPlayer.triggerEvent('cui_character:open', {'style'})
+    end, true, {
+        help = 'Open character style editor.',
+        validate = true,
+        arguments = {}
     })
 
     ESX.RegisterCommand('apparel', 'admin', function(xPlayer, args, showError)
-        xPlayer.triggerEvent('cui_character:open', { 'apparel' })
-        end, true, {help = 'Open character apparel editor.', validate = true, arguments = {}
+        xPlayer.triggerEvent('cui_character:open', {'apparel'})
+    end, true, {
+        help = 'Open character apparel editor.',
+        validate = true,
+        arguments = {}
     })
 
--- Standalone Deployment
+    -- Standalone Deployment
 else
     -- Create the database table if it does not exist
     MySQL.ready(function()
-        MySQL.Async.execute('CREATE TABLE IF NOT EXISTS `player_skins` (`id` int(11) NOT NULL auto_increment, `identifier` varchar(128) NOT NULL, `skin` LONGTEXT NULL DEFAULT NULL, PRIMARY KEY  (`id`), UNIQUE(`identifier`))',{}, 
-        function() end)
+        MySQL.Async.execute(
+            'CREATE TABLE IF NOT EXISTS `player_skins` (`id` int(11) NOT NULL auto_increment, `identifier` varchar(128) NOT NULL, `skin` LONGTEXT NULL DEFAULT NULL, PRIMARY KEY  (`id`), UNIQUE(`identifier`))',
+            {}, function()
+            end)
     end)
 
     RegisterServerEvent('cui_character:save')
@@ -317,10 +342,12 @@ else
 
         if license then
             MySQL.ready(function()
-                MySQL.Async.execute('INSERT INTO `player_skins` (`identifier`, `skin`) VALUES (@identifier, @skin) ON DUPLICATE KEY UPDATE `skin` = @skin', {
-                    ['@skin'] = json.encode(data),
-                    ['@identifier'] = license
-                })
+                MySQL.Async.execute(
+                    'INSERT INTO `player_skins` (`identifier`, `skin`) VALUES (@identifier, @skin) ON DUPLICATE KEY UPDATE `skin` = @skin',
+                    {
+                        ['@skin'] = json.encode(data),
+                        ['@identifier'] = license
+                    })
             end)
         end
     end)
@@ -335,7 +362,10 @@ else
                 MySQL.Async.fetchAll('SELECT skin FROM player_skins WHERE identifier = @identifier', {
                     ['@identifier'] = license
                 }, function(users)
-                    local playerData = { skin = nil, newPlayer = true}
+                    local playerData = {
+                        skin = nil,
+                        newPlayer = true
+                    }
                     if users and users[1] ~= nil and users[1].skin ~= nil then
                         playerData.skin = json.decode(users[1].skin)
                         playerData.newPlayer = false
@@ -348,25 +378,25 @@ else
 
     RegisterCommand("character", function(source, args, rawCommand)
         if (source > 0) then
-            TriggerClientEvent('cui_character:open', source, { 'features', 'style', 'apparel' })
+            TriggerClientEvent('cui_character:open', source, {'features', 'style', 'apparel'})
         end
     end, true)
 
     RegisterCommand("features", function(source, args, rawCommand)
         if (source > 0) then
-            TriggerClientEvent('cui_character:open', source, { 'features' })
+            TriggerClientEvent('cui_character:open', source, {'features'})
         end
     end, true)
 
     RegisterCommand("style", function(source, args, rawCommand)
         if (source > 0) then
-            TriggerClientEvent('cui_character:open', source, { 'style' })
+            TriggerClientEvent('cui_character:open', source, {'style'})
         end
     end, true)
 
     RegisterCommand("apparel", function(source, args, rawCommand)
         if (source > 0) then
-            TriggerClientEvent('cui_character:open', source, { 'apparel' })
+            TriggerClientEvent('cui_character:open', source, {'apparel'})
         end
     end, true)
 
